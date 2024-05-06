@@ -1,0 +1,7 @@
+Expected:
+mount
+    hello
+    sub-directory
+        hi
+
+2 directories, 2 files
