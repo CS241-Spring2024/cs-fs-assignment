@@ -3,6 +3,7 @@
  * */
 
 #include "impl.h"
+#include <fcntl.h>
 
 static const char *example_file_content = "Hello World!\n";
 static const char *example_file_name = "hello";
@@ -179,16 +180,7 @@ int main(int argc, char *argv[]) {
   fuse_daemonize(1); // Always run foreground so unmounting isn't required
 
   /* Block until ctrl+c or fusermount -u */
-  if (opts.singlethread)
-    ret = fuse_session_loop(fuse_session);
-  else {
-    config = fuse_loop_cfg_create();
-    fuse_loop_cfg_set_clone_fd(config, opts.clone_fd);
-    fuse_loop_cfg_set_max_threads(config, opts.max_threads);
-    ret = fuse_session_loop_mt(fuse_session, config);
-    fuse_loop_cfg_destroy(config);
-    config = NULL;
-  }
+  ret = fuse_session_loop(fuse_session);
 
   fuse_session_unmount(fuse_session);
 err_out3:
